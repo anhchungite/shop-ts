@@ -61,3 +61,28 @@ div.product div.media-body a.price:hover{
 	color:#FF0000;
 	font-size: 16px;
 }
+
+ul#list-product{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+ul#list-product li{
+	padding: 5px 0;
+	border-bottom: 1px solid #ddd;
+}
+h3.name{
+	margin-top: 0; 
+}
+.buy{
+	position: relative;
+}
+input.quantity{
+	width: 100%;
+	margin: 2px;
+	display: block
+}
+a.price, button.price{
+	background-color: #FF4000;
+	width: 100%
+}
