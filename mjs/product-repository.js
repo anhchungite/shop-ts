@@ -50,7 +50,7 @@ class ProductRepository {
                     <div class="buy col-md-3 text-right">`;
             if (this.products[i].canBuy) {
                 html += `<input name="qty-product-${this.products[i].id}" class="quantity" type="number" min="1" value="1">
-                        <a href="#" data-product="${this.products[i].id}" class="btn btn-warning price">$ ${this.products[i].price}</a>`;
+                        <a href="javascript:void(0)" data-product="${this.products[i].id}" class="btn btn-warning price">$ ${this.products[i].price}</a>`;
             }
             else {
                 html += `<button class="btn btn-warning price disabled">$ ${this.products[i].price}</button>`;

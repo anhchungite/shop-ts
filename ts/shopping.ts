@@ -11,8 +11,9 @@ namespace MDefine{
 }
 
 function showNotificaton(msg : string, type : string = 'success') : void{
-    $("#mnotification").addClass('alert-'+ type);
+    $("#mnotification").attr('class', 'alert alert-'+ type);
     $("#mnotification").html(msg);
+    
 }
 
 function checkQty(value : any) : boolean{
@@ -22,28 +23,60 @@ function checkQty(value : any) : boolean{
     }
     return true;
 }
-
+function showProduct(): void{
+    $(MDefine.ELM_LIST_PRODUCT).html(productRepository.showItemInHtml());
+    showNotificaton("Ready to shopping!");
+}
 function showCart() : void{
-$(MDefine.ELM_CART_BODY).html(cartObj.showCartBodyInHtml());
+    $(MDefine.ELM_CART_BODY).html(cartObj.showCartBodyInHtml());
+    $(MDefine.ELM_CART_FOOTER).html(cartObj.showCartFooterInHtml());
+}
+function addToCartEvent(qty: number, id: number): void{
+    if(checkQty(qty)){
+        let result: Product = cartObj.addProduct(productRepository.getItemById(id), qty);
+        if(result){                
+            showCart();
+            showNotificaton(`Add <b>${result.name}</b> to cart success!`);
+        }
+    }
+}
+function updateCartEvent(qty: number, id: number): void{
+    if(checkQty(qty)){
+        let result: Product = cartObj.updateCart(productRepository.getItemById(id), qty);
+        if(result){                
+            showCart();
+            showNotificaton(`Update <b>${result.name}</b> in cart success!`, 'success');
+        }
+    }
+}
+
+function deleteCartItemEvent(id: number): void{
+    let result: Product = cartObj.removeCartItem(productRepository.getItemById(id));
+    if(result){                
+        showCart();
+        showNotificaton(`Deleted <b>${result.name}</b> from cart success!`, 'success');
+    }
 }
 $(document).ready(function(){
-
-    
-    showNotificaton("Ready to shopping!");
-
-    $(MDefine.ELM_LIST_PRODUCT).html(productRepository.showItemInHtml());
-
+    showProduct();
+    showCart();
     $("a.price").click(function(){
         let id : number = $(this).data('product');
         let qty : number = Number($("input[name='qty-product-" + id + "']").val());
-        if(checkQty(qty)){
-            let result = cartObj.addProduct(productRepository.getItemById(id), qty);
-            if(result){                
-                $(MDefine.ELM_CART_BODY).html(cartObj.showCartBodyInHtml());
-                showNotificaton(`Add <b>${result.name}</b> to cart success!`);
-            }
-        }
+        addToCartEvent(qty, id);
     });
+
+    $(document).on("click", "button.btn-update", function(){
+        let id : number = $(this).data('product');
+        let qty : number = Number($("input[name='qty-cartitem-" + id + "']").val());
+        updateCartEvent(qty, id);
+    });
+
+    $(document).on("click", "button.btn-delete", function(){
+        let id : number = $(this).data('product');
+        deleteCartItemEvent(id);
+    });
+
 });
 
 
